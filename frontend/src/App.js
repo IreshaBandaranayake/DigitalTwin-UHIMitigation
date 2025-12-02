@@ -19,7 +19,7 @@ function App() {
 
   useEffect(() => {
     // Set Cesium Ion Token
-    Ion.defaultAccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI1ZmUwOTc5YS05YWIxLTRlYTUtOWMxYi0xN2YzY2FkMDc5M2QiLCJpZCI6MzQxMDYzLCJpYXQiOjE3NTkxMzI0MTd9.FiHrWMxTZHZXnV6ZpG9DX05EMJRsagDsgdhiX0USqeM";
+    Ion.defaultAccessToken = " ";
 
     // Tell Cesium where to load static assets
     window.CESIUM_BASE_URL = "/Cesium/";
