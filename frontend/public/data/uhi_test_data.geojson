@@ -1,0 +1,79 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "properties": {
+                "NDVI": 0.45,
+                "NDBI": 0.22,
+                "NDWI": 0.15,
+                "Population": 500,
+                "LST": 27.5
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            25.659,
+                            60.981
+                        ],
+                        [
+                            25.663,
+                            60.981
+                        ],
+                        [
+                            25.663,
+                            60.984
+                        ],
+                        [
+                            25.659,
+                            60.984
+                        ],
+                        [
+                            25.659,
+                            60.981
+                        ]
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "NDVI": 0.30,
+                "NDBI": 0.40,
+                "NDWI": 0.10,
+                "Population": 800,
+                "LST": 30.8
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            25.663,
+                            60.981
+                        ],
+                        [
+                            25.667,
+                            60.981
+                        ],
+                        [
+                            25.667,
+                            60.984
+                        ],
+                        [
+                            25.663,
+                            60.984
+                        ],
+                        [
+                            25.663,
+                            60.981
+                        ]
+                    ]
+                ]
+            }
+        }
+    ]
+}
