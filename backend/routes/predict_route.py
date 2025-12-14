@@ -17,7 +17,7 @@ DATA_FILE = BASE / "data" / "Lahti_2024_FullDataset.csv"
 MODEL_FILE = BASE / "models" / "final_lst_model.pkl"
 CALIBRATION_FILE = BASE / "models" / "rf_calibration.pkl"
 
-# === Load dataset & model ===
+# Load dataset & model
 if not DATA_FILE.exists():
     raise FileNotFoundError(f"{DATA_FILE} not found.")
 if not MODEL_FILE.exists():
@@ -60,9 +60,7 @@ class PredictionRequest(BaseModel):
     lat: float
 
 
-# ================================
-# Helper: compute indices
-# ================================
+# compute indices
 def calc_indices(R, G, N, S, B):
     NDVI = (N - R) / (N + R + 1e-6)
     NDWI = (G - N) / (G + N + 1e-6)
@@ -70,9 +68,7 @@ def calc_indices(R, G, N, S, B):
     EVI  = 2.5 * ((N - R) / (N + 6*R - 7.5*B + 1 + 1e-6))
     return NDVI, NDWI, NDBI, EVI
 
-# ================================
-# Helper: build feature dict
-# ================================
+# build feature dict
 def build_features(NDVI, NDWI, NDBI, EVI, lat, lon):
 
     feats = {
@@ -85,7 +81,7 @@ def build_features(NDVI, NDWI, NDBI, EVI, lat, lon):
         'longitude': lon
     }
 
-    # Derived features
+# Derived features
     feats['NDVI_NDWI'] = NDVI - NDWI
     feats['NDVI_NDBI'] = NDVI - NDBI
     feats['EVI_NDVI'] = EVI - NDVI
@@ -103,9 +99,7 @@ def build_features(NDVI, NDWI, NDBI, EVI, lat, lon):
 
     return feats
 
-# ================================
 # MAIN ROUTE
-# ================================
 @router.post("/predict")
 async def predict_location(request: PredictionRequest):
 
@@ -116,18 +110,16 @@ async def predict_location(request: PredictionRequest):
     _, idx = tree.query([request.lon, request.lat], k=1)
     base = df.iloc[int(idx)].to_dict()
 
-    # ================
-    # 1. BASELINE (DO NOT RECOMPUTE!)
+
+    # 1. BASELINE 
     # Use values from CSV exactly as model was trained
-    # ================
     NDVI_old = base["NDVI"]
     NDWI_old = base["NDWI"]
     NDBI_old = base["NDBI"]
     EVI_old  = base["EVI"]
 
-    # ================
+
     # 2. NEW BAND VALUES (apply modification)
-    # ================
     f = 0.1
     obj = OBJECT_BANDS[request.type]
 
@@ -144,17 +136,14 @@ async def predict_location(request: PredictionRequest):
     BLUE_new = GREEN_new * 0.5   # estimated BLUE
     BLUE_old = GREEN_old * 0.5   # but baseline indices DO NOT use this
 
-    # ================
+    
     # 3. NEW SPECTRAL INDICES
     # Recompute only NEW scenario
-    # ================
     NDVI_new, NDWI_new, NDBI_new, EVI_new = calc_indices(
         RED_new, GREEN_new, NIR_new, SWIR_new, BLUE_new
     )
 
-    # ================
     # 4. Build features
-    # ================
     base_feat = build_features(
         NDVI_old, NDWI_old, NDBI_old, EVI_old,
         base["latitude"], base["longitude"]
@@ -165,9 +154,7 @@ async def predict_location(request: PredictionRequest):
         base["latitude"], base["longitude"]
     )
 
-    # ================
     # 5. Predict
-    # ================
     base_X = np.array([[base_feat[f] for f in FEATURES]])
     new_X  = np.array([[new_feat[f] for f in FEATURES]])
 
