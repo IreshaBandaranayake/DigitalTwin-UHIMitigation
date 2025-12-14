@@ -9,10 +9,10 @@ import "cesium/Build/Cesium/Widgets/widgets.css";
 function App() {
   const viewerRef = useRef(null);
   const [activeTool, setActiveTool] = useState(null); // track current intervention mode
-  const activeToolRef = useRef(null); // ✅ new ref to always hold latest tool
+  const activeToolRef = useRef(null); 
   const [infoMessage, setInfoMessage] = useState("");
 
-  // ✅ Keep ref synced with state
+  // Keep ref synced with state
   useEffect(() => {
     activeToolRef.current = activeTool;
   }, [activeTool]);
@@ -58,7 +58,7 @@ function App() {
 
       // Fly directly to Lahti city center
       viewer.camera.setView({
-        destination: Cartesian3.fromDegrees(25.6615, 60.9827, 250),  // 🟢 Lower altitude (~350m)
+        destination: Cartesian3.fromDegrees(25.6615, 60.9827, 250),  // Lower altitude (~350m)
         orientation: {
           heading: CesiumMath.toRadians(0),
           pitch: CesiumMath.toRadians(-35),
@@ -105,10 +105,10 @@ function App() {
       const handler = new ScreenSpaceEventHandler(viewer.canvas);
       handler.setInputAction(async (click) => {
         const currentTool = activeToolRef.current;
-        console.log("🖱️ Map clicked! Current tool:", currentTool, click.position);
+        console.log("Map clicked! Current tool:", currentTool, click.position);
 
         if (!currentTool) {
-          console.warn("⚠️ No active tool selected");
+          console.warn("No active tool selected");
           return;
         }
 
@@ -119,7 +119,7 @@ function App() {
         }
 
         if (!defined(pickedPosition)) {
-          console.warn("⚠️ Could not determine position.");
+          console.warn("Could not determine position.");
           return;
         }
 
@@ -136,10 +136,10 @@ function App() {
           });
 
           const data = await response.json();
-          console.log("✅ Backend response:", data);
+          console.log("Backend response:", data);
 
           
-          // 🌡️ Interpret UHI effect
+          // Interpret UHI effect
           const uhiEffect =
             data.LST_change < 0
               ? "🌿 UHI reduced"
@@ -147,7 +147,7 @@ function App() {
               ? "🔥 UHI increased"
               : "⚖️ No significant change";
 
-          // 💬 Show popup message
+          // Show popup message
           const lstChange = data.LST_change ?? data.delta_LST ?? 0;
           const predicted = data.predicted_LST ?? 0;
 
@@ -158,14 +158,14 @@ function App() {
           // Automatically clear after 5 seconds
           //setTimeout(() => setInfoMessage(""), 5000);
 
-          // 🖼️ Choose correct icon
+          // Choose correct icon
           let iconPath = "/icons/buildingarea.png";
           if (currentTool === "tree") iconPath = "/icons/greenarea.png";
           if (currentTool === "roof") iconPath = "/icons/greenroof.png";
           if (currentTool === "water") iconPath = "/icons/waterbody.png";
           //if (currentTool === "biolding") iconPath = "/icons/water.png";
 
-          // 🗺️ Add entity
+          // Add entity
           viewer.entities.add({
             position: pickedPosition,
             billboard: {
@@ -189,7 +189,7 @@ function App() {
 
           viewer.scene.requestRender();
         } catch (err) {
-          console.error("❌ Backend request failed:", err);
+          console.error("Backend request failed:", err);
           alert("Failed to contact backend server.");
         }
       }, ScreenSpaceEventType.LEFT_CLICK);
@@ -202,11 +202,11 @@ function App() {
   }, []);
 
   /*
-  // 🎥 Camera bookmarks for key areas in Lahti
+  // Camera bookmarks for key areas in Lahti
   function flyToLocation(location) {
   const viewer = viewerRef.current;
   if (!viewer) {
-    console.warn("⚠️ Viewer not ready yet. Try again in a moment.");
+    console.warn("Viewer not ready yet. Try again in a moment.");
     return;
   }
 
@@ -239,13 +239,13 @@ function App() {
 
   const target = views[location];
   if (!target) {
-    console.warn(`⚠️ Unknown camera view: ${location}`);
+    console.warn(`Unknown camera view: ${location}`);
     return;
   }
 
-  console.log(`📍 Flying to ${target.label}`);
+  console.log(`Flying to ${target.label}`);
 
-  // 🟢 Fly smoothly using Cesium’s built-in easing
+  // Fly smoothly using Cesium’s built-in easing
   viewer.camera.flyTo({
     destination: Cartesian3.fromDegrees(target.lon, target.lat, target.height),
     orientation: {
@@ -261,7 +261,7 @@ function App() {
 
   return (
     <div style={{ width: "100vw", height: "100vh" }}>
-      {/* 🧭 Floating message */}
+      {/* Floating message */}
       {infoMessage && (
         <div
           style={{
@@ -282,7 +282,7 @@ function App() {
       )}
 
       {/* Buttons */}
-      {/* 🌳 Action & Camera Buttons */}
+      {/* Action & Camera Buttons */}
       <div
         style={{
           position: "absolute",
@@ -305,7 +305,7 @@ function App() {
         {/* Collapsible Camera Section */}
         {/* <details style={{ marginTop: "10px" }}>
           <summary style={{ cursor: "pointer", fontWeight: "bold" }}>
-            📸 Camera Views
+              Camera Views
           </summary>
           <div
             style={{
@@ -316,13 +316,13 @@ function App() {
             }}
           >
             <button onClick={() => flyToLocation("marketSquare")}>
-              📍 Market Square
+              Market Square
             </button>
             <button onClick={() => flyToLocation("sportsCentre")}>
-              🏟️ Sports Centre
+              Sports Centre
             </button>
             <button onClick={() => flyToLocation("radiomaki")}>
-              📡 Radiomäki Hill
+              Radiomäki Hill
             </button>
           </div>
         </details>    */}
